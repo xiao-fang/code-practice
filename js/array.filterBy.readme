@@ -12,7 +12,7 @@
     * @param skipNull Boolean, if true, then skip filter array when value is null/empty then return full array.
     * @returns {*} []
     */
-   Array.prototype.filterBy = function (field, value, skipNull)
+   Array.prototype.filterBy = function (field, value, skipNull){}
 ```
 
 
