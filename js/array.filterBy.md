@@ -1,8 +1,9 @@
 ## Array.prototype.filterBy
 
 > extend a prototype method 'filterBy' for Array
-> by Edward
 
+- view code
+<a href='/js/array.filterBy.js'>array.filterBy.js</a>
 
 ``` javascript
 /**
