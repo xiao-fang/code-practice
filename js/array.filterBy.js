@@ -33,7 +33,7 @@ Array.prototype.filterBy = function (field, value, skipNull) {
     return clone.map(function (item) {
         var isMatch = false;
         var obj = item;
-        for (i = 0; i < fields.length; i++) {
+        for (var i = 0; i < fields.length; i++) {
             if (obj) {
                 var f = fields[i];
                 if (f.endsWith('[]')) {
