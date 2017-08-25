@@ -5,6 +5,12 @@ define(function (require) {
         return typeof fn === 'function';
     }
 
+    function isInteger(num) {
+        return (Number.isInteger || function (value) {
+            return typeof value === "number" && isFinite(value) && Math.floor(value) === value;
+        })(num);
+    }
+
     /**
      * @param task the task to be execute
      * @param options
@@ -23,7 +29,7 @@ define(function (require) {
             throw new Error("invalid arguments that task should be a function")
         }
 
-        var retryTimes = Number.isInteger(options && options.retryTimes) && options.retryTimes || defalutOptions.retryTimes;
+        var retryTimes = isInteger(options && options.retryTimes) && options.retryTimes || defalutOptions.retryTimes;
         var successPredicator = isFunction(options && options.successPredicator) && options.successPredicator || defalutOptions.successPredicator;
 
         var attempt = 0;
