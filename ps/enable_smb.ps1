@@ -38,7 +38,7 @@
 $osVersion = [System.Environment]::OSVersion.Version
 $majorVersion = $osVersion.Major
 $minorVersion = $osVersion.Minor
-$restartRequired = $true
+$restartRequired = $false
 
 # Windows Server 2012 R2 & 2016, Windows 8.1 & Windows 10
 if (($majorVersion -eq 10 -and $minorVersion -eq 0) -or ($majorVersion -eq 6 -and $minorVersion -eq 3)) {
@@ -48,7 +48,7 @@ if (($majorVersion -eq 10 -and $minorVersion -eq 0) -or ($majorVersion -eq 6 -an
         $restartRequired = $true
     }
 
-    $smb2 = Get-SmbServerConfiguration | Select EnableSMB2Protocol
+    $smb2 = Get-SmbServerConfiguration | Select-Object EnableSMB2Protocol
     if ($smb2.EnableSMB2Protocol -ne $true) {
         Set-SmbServerConfiguration -EnableSMB2Protocol $true -Force
         $restartRequired = $true
@@ -57,13 +57,13 @@ if (($majorVersion -eq 10 -and $minorVersion -eq 0) -or ($majorVersion -eq 6 -an
 
 # Windows 8 & Windows Server 2012
 if ($majorVersion -eq 6 -and $minorVersion -eq 2) {
-    $smb1 = Get-SmbServerConfiguration | Select EnableSMB1Protocol
+    $smb1 = Get-SmbServerConfiguration | Select-Object EnableSMB1Protocol
     if ($smb1.EnableSMB1Protocol -ne $true) {
         Set-SmbServerConfiguration -EnableSMB1Protocol $true -Force
         $restartRequired = $true
     }
 
-    $smb2 = Get-SmbServerConfiguration | Select EnableSMB2Protocol
+    $smb2 = Get-SmbServerConfiguration | Select-Object EnableSMB2Protocol
     if ($smb2.EnableSMB2Protocol -ne $true) {
         Set-SmbServerConfiguration -EnableSMB2Protocol $true -Force
         $restartRequired = $true
@@ -73,7 +73,7 @@ if ($majorVersion -eq 6 -and $minorVersion -eq 2) {
 # Windows 7, Windows Server 2008 R2, Windows Vista, & Windows Server 2008
 if ($majorVersion -eq 6 -and ($minorVersion -eq 1 -or $minorVersion -eq 0)) {
     $smb = Get-Item HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters | ForEach-Object { Get-ItemProperty $_.pspath }
-    if ($smb.SMB1 -ne $null -and $smb.SMB1 -ne 1) {
+    if ($null -ne $smb.SMB1 -and $smb.SMB1 -ne 1) {
         Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" SMB1 -Type DWORD -Value 1 -Force
         $restartRequired = $true
     }
